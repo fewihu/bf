@@ -1,0 +1,76 @@
+#! /bin/bash
+
+# DEPENDENCIES: core-utils, fzf, xargs, realpath
+
+function clearRmFiles()
+{
+    # nothing to clear
+    if [[ -z $2 ]]
+    then
+	return 1
+    fi
+    
+    numFiles=$(echo "$2" | wc -l)
+
+    cd "$HOME/laf/r"
+    diskSpaceFiles=$(du -hc "$2" | tail -n1 | tr '\t' ' ' | cut -d ' ' -f1)
+    cd - &> /dev/null 
+
+    header=$(echo -e "There are $numFiles entries, that are $1 than a week, consuming $diskSpaceFiles:")
+    toDelete=$(echo "$2" | \
+	fzf --no-mouse --border \
+	    -m --reverse --header="$header" \
+	    --preview="tree $HOME/laf/r/{}")
+
+    cd "$HOME/laf/r"
+    /usr/bin/rm_orig -rfv $toDelete
+    cd - > /dev/null
+}
+
+function clearOtherFiles()
+{
+    header="There are other entries:"
+    files=$(find "$HOME/laf" -maxdepth 1 -mtime -7 | \
+		   xargs realpath --relative-to "$HOME/laf" | \
+		   grep -Ev "^.$|^..$|^r$")
+
+    # nothing to clear
+    if [ -z "$files" ]
+    then
+	return 1
+    fi
+    
+    toDelete=$(echo "$files" | 
+    		   fzf --no-mouse --border \
+		       -m --reverse --header="$header" \
+		       --preview="tree $HOME/laf/{} ; echo -e '\n--------------------\n' ; stat --format %x $HOME/laf/{}")
+
+    cd "$HOME"/laf/
+    /usr/bin/rm_orig -rfv $toDelete
+    cd - > /dev/null
+}
+
+((ret=0))
+
+# find files older than a week
+oldFiles=$(ls -1A ~/laf/r/ | awk -v lastWeek=$(date --date 'last week' +%y-%m-%d) '{ if($0 < lastWeek) print $0}')
+clearRmFiles "older" $oldFiles
+((ret=ret+$?))
+
+# find file younger than a week
+newFiles=$(ls -1A ~/laf/r/ | awk -v lastWeek=$(date --date 'last week' +%y-%m-%d) '{ if($0 >= lastWeek) print $0}')
+clearRmFiles "younger" $newFiles
+((ret=ret+$?))
+
+clearOtherFiles
+((ret=ret+$?))
+
+if [[ $ret -eq 3 ]]
+then
+    echo -n "nothing to clean: "
+else
+    echo -en "\ncleaned: "
+fi
+
+echo -e "$HOME/laf\nDisk usage of laf directory:"
+du -hc "$HOME"/laf | tail -n1 | tr '\t' ' ' | cut -d ' ' -f1

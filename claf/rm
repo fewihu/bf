@@ -1,0 +1,29 @@
+#! /bin/bash
+
+# DEPENDENCIES: core-utils
+
+# sanity check args
+if [ $# -le 0 ]
+then
+    echo "Usage: $0 <file>..."
+fi
+
+((PART_OF_DAY=$(date +%H)/6))
+LAF_DIR="$HOME/laf/r/$(date +%y-%m-%d)/$PART_OF_DAY"
+
+# make sure daily laf dir is present
+mkdir -p "$LAF_DIR"
+
+# mv the files
+for file in "$@"
+do
+    target=$(echo "$file" | tr -d '/')
+    mv -v "$file" "$LAF_DIR/$target:$(uuid)"
+done
+
+# check size of laf
+lafDiskUsage=$(du ~/laf/ -cb | tail -n1 | tr '\t' ' ' | cut -d ' ' -f1)
+if [ "$lafDiskUsage" -gt 536870912 ]
+then
+    echo "laf directory $HOME/laf fills up, consider cleaning it with 'claf'"
+fi
