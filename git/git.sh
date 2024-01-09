@@ -315,7 +315,7 @@ function gfileh()
 }
 
 # files touched by last commit
-function gtouched()
+function gtch()
 {
     git show --pretty="" --name-only   
 }
