@@ -208,13 +208,11 @@ function glt()
 	--tiebreak=index \
 	--no-multi \
 	--ansi \
-	--preview="echo {} | xargs git log --oneline --graph --decorate" \
-	--header "select a tag and hit RET to check it out" \
-	--bind "ctrl-s:preview(echo {} | xargs -I % sh -c 'git show --quiet %')" \
+	--preview="echo {} | xargs git show --quiet" \
+	--header "RET to check it out" \
 	--bind "enter:execute( echo {} | xargs -I % sh -c 'git checkout %')+accept" \
-	--bind "ctrl-w:execute(echo {} | clip.exe)+accept"    
-} 
-# --- tag ---
+	--bind "ctrl-w:execute(echo {} | xlcip -sel clip)+accept"
+}
 
 # === commit ===
 # commit
