@@ -175,9 +175,16 @@ function gmain()
     fi
 }
 
+
 # diff
 function giff()
 {
+    if [[ $1 == '-s' ]]
+    then
+	shift
+	git diff --cached "$@"
+	return
+    fi
     git diff "$@"
 }
 
