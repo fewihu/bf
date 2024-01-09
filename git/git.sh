@@ -26,9 +26,10 @@ ahead_or_behind()
 {
     git status -sb | grep -o -e 'ahead [0-9]*' -e 'behind [0-9]*'
 }
-# --- helper functions end ---
 
+# --- helper functions end ---
 # === push and pull ===
+
 # prune stalled branches
 function gprune()
 {
@@ -55,9 +56,10 @@ function gpus()
 	git push --set-upstream origin "$@"
     fi
 }
-# --- push and pull end ---
 
+# --- push and pull end ---
 # === rebase ===
+
 function gri ()
 {
     if [ $# -ne 1 ]
@@ -68,10 +70,14 @@ function gri ()
     fi
     git rebase -i HEAD~"$1"
 }
-# --- rebase end ---
 
+# --- rebase end ---
 # === log ===
+
 # super fancy interactive git commit history
+# CTRL-W copy chosen commit hash to clipboard
+# CTRL-F preview git diff --name-only
+# RETURN git show chosen commit
 function gfh()
 {
     git log --graph --color=always \
@@ -82,16 +88,14 @@ function gfh()
     --no-multi \
     --ansi \
     --preview="echo {} |
-        grep -o '[a-f0-9]\{9\}' |
+        grep -o '[a-f0-9]\{4,64\}' |
         head -1 |
         xargs -I % sh -c 'git show --oneline --color=always % |
 	delta'" \
-	    --header "RET: view | C-w copy hash" \
-	    --bind "ctrl-s:preview(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs -I % sh -c 'git show --quiet %')" \
-	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
-	    --bind "ctrl-w:execute(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | clip.exe)+accept" \
-	    --bind "ctrl-g:execute(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs git --no-pager diff)+accept" \
-	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
+	    --header "RET: show | C-w copy hash | C-f preview file names only" \
+	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
+	    --bind "ctrl-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xclip -sel clip)+accept" \
+	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
 }
 
 # print changes that came with given commit
@@ -124,7 +128,7 @@ function gl()
 	    return 1
 	    ;;
 	*)
-	    git log --oneline
+	    git_log_num 20
 	    ;;
     esac
 }
@@ -133,6 +137,8 @@ git_log_num()
 {
     git --no-pager log --oneline | head -"$1" | nl
 }
+
+# --- log end ---
 # === branches ===
 
 # super fancy git checkout alias for remotes -> local
@@ -171,9 +177,16 @@ function gmain()
     fi
 }
 
+
 # diff
 function giff()
 {
+    if [[ $1 == '-s' ]]
+    then
+	shift
+	git diff --cached "$@"
+	return
+    fi
     git diff "$@"
 }
 
@@ -182,10 +195,13 @@ function gnb()
 {
     git checkout -b "$@"
 }
-# --- branches end ---
 
+# --- branches end ---
 # === tag ===
+
 # copy tag to clipboard or check it out
+# RETURN checkout
+# CTRL-W copy to clipboard
 function glt()
 {
     git tag --sort=taggerdate | tac | \
@@ -194,15 +210,15 @@ function glt()
 	--tiebreak=index \
 	--no-multi \
 	--ansi \
-	--preview="echo {} | xargs git log --oneline --graph --decorate" \
-	--header "select a tag and hit RET to check it out" \
-	--bind "ctrl-s:preview(echo {} | xargs -I % sh -c 'git show --quiet %')" \
+	--preview="echo {} | xargs git show --quiet" \
+	--header "RET to check it out" \
 	--bind "enter:execute( echo {} | xargs -I % sh -c 'git checkout %')+accept" \
-	--bind "ctrl-w:execute(echo {} | clip.exe)+accept"    
-} 
-# --- tag ---
+	--bind "ctrl-w:execute(echo {} | xlcip -sel clip)+accept"
+}
 
+# --- tag end ---
 # === commit ===
+
 # commit
 function gc()
 {
@@ -224,20 +240,23 @@ function ga()
 
 # interactive patchwise git add
 function gadd(){
-    while :
-    do
-	FILE=$(git status -s | grep -e "^M  " -v | grep -v "^ ?" | grep -v "^ D" | grep -v "^ A"  | grep -v "^A "  | fzf )
-	if [ -z  "$FILE" ]
-	then
-	    break
-	fi
 
-	echo "$FILE" | grep "??"
-	if [ $? -ne 0 ]
+    if [ $# -ne 1 ]
+    then
+	read -p "Aspect?" aspect
+    else
+	aspect=$1
+    fi
+    files=$(git status -s | grep -E "(^M )|(^ \?)|(^ D)|(^ A)|(^A )|(^MM)|(^\?\?)" | cut -d ' ' -f2)
+
+    echo debug
+    for file in $files
+    do
+	echo "$aspect"
+	read -p "Add $file?" ret
+	if [ $ret="y" ]
 	then
-	    git add -p "$(echo "$FILE" | cut -b4-)"
-	else
-	    git add "$(echo "$FILE" | cut -b4- )"
+	    git add -p $file
 	fi
     done
 }
@@ -253,11 +272,12 @@ function gane()
 {
     git commit --amend --no-edit
 }
-# --- commit end ---
 
+# --- commit end ---
 # === status ===
+
 # git status
-function gst()
+function gss()
 {
     git status
 }
@@ -268,9 +288,10 @@ function gs()
     ahead_or_behind
     git status -s
 }
-# --- status end ---
 
+# --- status end ---
 # === others ===
+
 # change directory to git root if pwd is in git repo
 function cdgrt()
 {
@@ -299,7 +320,7 @@ function gfileh()
 }
 
 # files touched by last commit
-function gtouched()
+function gtch()
 {
     git show --pretty="" --name-only   
 }

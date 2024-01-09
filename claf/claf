@@ -23,7 +23,7 @@ function clearRmFiles()
 	    --preview="tree $HOME/laf/r/{}")
 
     cd "$HOME/laf/r"
-    /usr/bin/rm_orig -rfv $toDelete
+    rm -rfv $toDelete
     cd - > /dev/null
 }
 
@@ -46,7 +46,7 @@ function clearOtherFiles()
 		       --preview="tree $HOME/laf/{} ; echo -e '\n--------------------\n' ; stat --format %x $HOME/laf/{}")
 
     cd "$HOME"/laf/
-    /usr/bin/rm_orig -rfv $toDelete
+    rm -rfv $toDelete
     cd - > /dev/null
 }
 
