@@ -268,11 +268,12 @@ function gane()
 {
     git commit --amend --no-edit
 }
-# --- commit end ---
 
+# --- commit end ---
 # === status ===
+
 # git status
-function gst()
+function gss()
 {
     git status
 }
