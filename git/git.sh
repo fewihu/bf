@@ -71,7 +71,11 @@ function gri ()
 # --- rebase end ---
 
 # === log ===
+
 # super fancy interactive git commit history
+# CTRL-W copy chosen commit hash to clipboard
+# CTRL-F preview git diff --name-only
+# RETURN git show chosen commit
 function gfh()
 {
     git log --graph --color=always \
@@ -82,16 +86,14 @@ function gfh()
     --no-multi \
     --ansi \
     --preview="echo {} |
-        grep -o '[a-f0-9]\{9\}' |
+        grep -o '[a-f0-9]\{4,64\}' |
         head -1 |
         xargs -I % sh -c 'git show --oneline --color=always % |
 	delta'" \
-	    --header "RET: view | C-w copy hash" \
-	    --bind "ctrl-s:preview(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs -I % sh -c 'git show --quiet %')" \
-	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
-	    --bind "ctrl-w:execute(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | clip.exe)+accept" \
-	    --bind "ctrl-g:execute(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs git --no-pager diff)+accept" \
-	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{9\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
+	    --header "RET: show | C-w copy hash | C-f preview file names only" \
+	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
+	    --bind "ctrl-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xclip -sel clip)+accept" \
+	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
 }
 
 # print changes that came with given commit
