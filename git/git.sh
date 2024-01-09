@@ -126,7 +126,7 @@ function gl()
 	    return 1
 	    ;;
 	*)
-	    git log --oneline
+	    git_log_num 20
 	    ;;
     esac
 }
@@ -135,6 +135,8 @@ git_log_num()
 {
     git --no-pager log --oneline | head -"$1" | nl
 }
+
+# --- log end ---
 # === branches ===
 
 # super fancy git checkout alias for remotes -> local
@@ -187,7 +189,10 @@ function gnb()
 # --- branches end ---
 
 # === tag ===
+
 # copy tag to clipboard or check it out
+# RETURN checkout
+# CTRL-W copy to clipboard
 function glt()
 {
     git tag --sort=taggerdate | tac | \
