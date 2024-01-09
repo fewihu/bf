@@ -26,9 +26,10 @@ ahead_or_behind()
 {
     git status -sb | grep -o -e 'ahead [0-9]*' -e 'behind [0-9]*'
 }
-# --- helper functions end ---
 
+# --- helper functions end ---
 # === push and pull ===
+
 # prune stalled branches
 function gprune()
 {
@@ -55,9 +56,10 @@ function gpus()
 	git push --set-upstream origin "$@"
     fi
 }
-# --- push and pull end ---
 
+# --- push and pull end ---
 # === rebase ===
+
 function gri ()
 {
     if [ $# -ne 1 ]
@@ -68,8 +70,8 @@ function gri ()
     fi
     git rebase -i HEAD~"$1"
 }
-# --- rebase end ---
 
+# --- rebase end ---
 # === log ===
 
 # super fancy interactive git commit history
@@ -193,8 +195,8 @@ function gnb()
 {
     git checkout -b "$@"
 }
-# --- branches end ---
 
+# --- branches end ---
 # === tag ===
 
 # copy tag to clipboard or check it out
@@ -214,7 +216,9 @@ function glt()
 	--bind "ctrl-w:execute(echo {} | xlcip -sel clip)+accept"
 }
 
+# --- tag end ---
 # === commit ===
+
 # commit
 function gc()
 {
@@ -284,9 +288,10 @@ function gs()
     ahead_or_behind
     git status -s
 }
-# --- status end ---
 
+# --- status end ---
 # === others ===
+
 # change directory to git root if pwd is in git repo
 function cdgrt()
 {
