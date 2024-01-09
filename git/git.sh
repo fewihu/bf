@@ -236,20 +236,23 @@ function ga()
 
 # interactive patchwise git add
 function gadd(){
-    while :
-    do
-	FILE=$(git status -s | grep -e "^M  " -v | grep -v "^ ?" | grep -v "^ D" | grep -v "^ A"  | grep -v "^A "  | fzf )
-	if [ -z  "$FILE" ]
-	then
-	    break
-	fi
 
-	echo "$FILE" | grep "??"
-	if [ $? -ne 0 ]
+    if [ $# -ne 1 ]
+    then
+	read -p "Aspect?" aspect
+    else
+	aspect=$1
+    fi
+    files=$(git status -s | grep -E "(^M )|(^ \?)|(^ D)|(^ A)|(^A )|(^MM)|(^\?\?)" | cut -d ' ' -f2)
+
+    echo debug
+    for file in $files
+    do
+	echo "$aspect"
+	read -p "Add $file?" ret
+	if [ $ret="y" ]
 	then
-	    git add -p "$(echo "$FILE" | cut -b4-)"
-	else
-	    git add "$(echo "$FILE" | cut -b4- )"
+	    git add -p $file
 	fi
     done
 }
