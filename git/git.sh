@@ -33,7 +33,7 @@ ahead_or_behind()
 # prune stalled branches
 function gprune()
 {
-    git fetch --prune origin
+    git fetch --prune origin "$@"
 }
 
 function gp()
@@ -292,13 +292,13 @@ function gadd(){
 # amend commit
 function gamend()
 {
-    git commit --amend
+    git commit --amend "$@"
 }
 
 # amend without edit
 function gane()
 {
-    git commit --amend --no-edit
+    git commit --amend --no-edit "$@"
 }
 
 # --- commit end ---
@@ -307,14 +307,14 @@ function gane()
 # git status
 function gss()
 {
-    git status
+    git status "$@"
 }
 
 # git short status with ahead or behind info relativ to remote
 function gs()
 {
     ahead_or_behind
-    git status -s
+    git status -s "$@"
 }
 
 # --- status end ---
