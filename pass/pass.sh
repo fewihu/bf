@@ -17,5 +17,6 @@ function pnew()
 
 function puse()
 {
-    pass ls | tail -n +2 | grep -Eo "([[:alnum:]]+(-)?)+"  | fzf | xargs pass show -c
+    key=$(pass ls | tail -n +2 | grep -Eo "([[:alnum:]]+(-)?)+"  | fzf)
+    pass show -c "$key"
 }
