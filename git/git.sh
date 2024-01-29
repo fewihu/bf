@@ -257,7 +257,13 @@ function guc
 # add
 function ga()
 {
-    git add "$@"
+    status=$(git status -s "$@"| cut -b-2)
+    if [ $status == "??" ]
+    then
+	git add "$@"
+	return 0
+    fi
+    git add -p "$@"
 }
 
 # interactive patchwise git add
