@@ -192,6 +192,20 @@ function gnb()
     git checkout -b "$@"
 }
 
+# git branch
+function gb()
+{
+    if [ $# -eq 0  ]
+    then
+	# if no args were supplied, give an overview
+	git branch --all
+	return
+    else
+	# if args were supplied use gb as alias
+	git branch "$@"
+    fi
+}
+
 # --- branches end ---
 # === tag ===
 
