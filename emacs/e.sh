@@ -14,7 +14,8 @@ function edr()
 
 # -- client
 # lucid
-alias e="emacsclient -c"
+alias em="emacsclient -c"
+alias e="emacsclient -c -F \"'(fullscreen . maximized)\""
 # nox
 alias et="emacsclient"
 # if everything is falling apart
