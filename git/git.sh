@@ -238,7 +238,7 @@ function gdisc()
 # commit
 function gc()
 {
-    git commit "$@"
+    git commit -s "$@"
 }
 
 # add and commit
