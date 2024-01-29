@@ -183,6 +183,12 @@ function giff()
 # new branch
 function gnb()
 {
+    if [ $# -lt 1 ]
+    then
+	echo "gnb <branch>"
+	echo " * create new local branch <branch>"
+	return
+    fi
     git checkout -b "$@"
 }
 
