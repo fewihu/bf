@@ -229,6 +229,12 @@ function glt()
 # --- tag end ---
 # === commit ===
 
+# discard changes in working directory patchwise
+function gdisc()
+{
+    git checkout -p -- "$@"
+}
+
 # commit
 function gc()
 {
