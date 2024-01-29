@@ -98,16 +98,6 @@ function gfh()
 	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
 }
 
-# print changes that came with given commit
-function gchg()
-{
-    if git cat-file commit "$1"; then
-        git diff $1~ "$1"
-    else   	
-        echo "$1" does not exist
-    fi
-}
-
 function gl()
 {
     case $1 in
