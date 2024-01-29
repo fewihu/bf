@@ -248,6 +248,12 @@ function gac()
     git commit
 }
 
+# discard last commit, but keep staging area
+function guc
+{
+    git reset @~
+}
+
 # add
 function ga()
 {
