@@ -125,7 +125,13 @@ function gl()
 
 git_log_num()
 {
-    git --no-pager log --oneline | head -"$1" | nl
+    me=$(git config user.name)
+    git --no-pager log -n "$1" --pretty="%h :%G?:%<(20)%cn:END: %s" \
+	| nl \
+	| awk '{ gsub(":G:","\033[3m"); print }' \
+	| awk '{ gsub(":END:","\033[0m"); print }' \
+	| awk '{ gsub(":N:","\033[35m"); print }' \
+	| awk -v me="$me" '{ gsub("'"$me"'","\033[34m'"$me"'\033[0m"); print}'
 }
 
 # --- log end ---
