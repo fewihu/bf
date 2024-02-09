@@ -94,7 +94,7 @@ function gfh()
 	delta'" \
 	    --header "RET: show | C-w copy hash | C-f preview file names only" \
 	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
-	    --bind "ctrl-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xclip -sel clip)+accept" \
+	    --bind "alt-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | wl-copy )+accept" \
 	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
 }
 
