@@ -6,7 +6,7 @@
 # My personal git frontend              #
 # ===================================== #
 
-# === helper functions ===
+# === helpers ===
 
 # check if in git root
 test_cd()
@@ -27,7 +27,7 @@ ahead_or_behind()
     git status -sb | grep -o -e 'ahead [0-9]*' -e 'behind [0-9]*'
 }
 
-# --- helper functions end ---
+# --- helpers end ---
 # === push and pull ===
 
 # prune stalled branches
@@ -359,3 +359,13 @@ function gtch()
     git show --pretty="" --name-only   
 }
 # --- others end ---
+
+function ghelp()
+{
+    if [ $# -eq 1 ]
+    then
+	cat ~/bf/git/git.sh | grep "function" -B1 | grep -E -A2 "# (.)*$1"
+    else
+	cat ~/bf/git/git.sh | grep "function" -B1	
+    fi
+}
