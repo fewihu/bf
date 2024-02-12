@@ -16,3 +16,5 @@ function psig()
 	echo "$p id dead"
     fi 
 }
+
+alias mv="mv -i"
