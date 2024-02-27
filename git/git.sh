@@ -179,7 +179,7 @@ function gmain()
 }
 
 
-# diff
+# diff, show staging area by default
 function giff()
 {
     if [[ $1 == '-s' ]]
