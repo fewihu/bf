@@ -159,7 +159,7 @@ function gchck()
 # switch to local branch
 function gbloc()
 {
-    git branch | grep -v "\*" | fzf | xargs git switch
+    git branch | grep -v "\*" | fzf | xargs git switch $@
 }
 
 # checkout main or master
