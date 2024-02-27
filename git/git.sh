@@ -99,7 +99,7 @@ function gfh()
 	delta'" \
 	    --header "RET: show | C-w copy hash | C-f preview file names only" \
 	    --bind "enter:execute( echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs -I % sh -c 'git show --oneline %')+accept" \
-	    --bind "alt-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | wl-copy )+accept" \
+	    --bind "alt-w:execute(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xclip -selection c)+accept" \
 	    --bind "ctrl-f:preview(echo {} | grep -o '[a-f0-9]\{4,64\}' | head -1 | xargs git diff-tree --no-commit-id --name-only -r)"
 }
 
@@ -234,7 +234,7 @@ function glt()
 	--preview="echo {} | xargs git show --quiet" \
 	--header "RET to check it out" \
 	--bind "enter:execute( echo {} | xargs -I % sh -c 'git checkout %')+accept" \
-	--bind "ctrl-w:execute(echo {} | xlcip -sel clip)+accept"
+	--bind "ctrl-w:execute(echo {} | xclip -selection c)+accept"
 }
 
 # --- tag end ---
