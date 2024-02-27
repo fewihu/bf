@@ -53,7 +53,12 @@ function gpus()
     then
 	git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)"
     else
-	git push --set-upstream origin "$@"
+	if [ $1 == "-f" ]
+	then
+	    git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)" -f
+	else
+	    git push --set-upstream origin "$@"
+	fi
     fi
 }
 
