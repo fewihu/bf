@@ -243,6 +243,12 @@ function glt()
 # discard changes in working directory patchwise
 function gdisc()
 {
+    if [ $1 == "-s" ]
+    then
+	shift
+	git reset HEAD "$@" -p
+	return
+    fi
     git checkout -p -- "$@"
 }
 
