@@ -53,7 +53,7 @@ function gpus()
     then
 	git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)"
     else
-	if [ $1 == "-f" ]
+	if [ "$1" == "-f" ]
 	then
 	    git push --set-upstream origin "$(git rev-parse --abbrev-ref HEAD)" -f
 	else
@@ -118,7 +118,7 @@ function gl()
 	-g)
 	    git log --oneline --graph
 	    ;;
-	-*|--*)
+	-*)
 	    echo "Unknown option $1"
 	    return 1
 	    ;;
@@ -244,7 +244,7 @@ function glt()
 # discard changes in working directory patchwise
 function gdisc()
 {
-    if [ $1 == "-s" ]
+    if [ "$1" == "-s" ]
     then
 	shift
 	git reset HEAD "$@" -p
@@ -276,7 +276,7 @@ function guc
 function ga()
 {
     status=$(git status -s "$@"| cut -b-2)
-    if [ $status == "??" ]
+    if [ "$status" == "??" ]
     then
 	git add "$@"
 	return 0
@@ -344,7 +344,7 @@ function cdgrt()
     target=$(git rev-parse --show-toplevel)
     if [ $? -eq 0 ]; then
 	echo "switching to git root: $target"
-	cd $target
+	cd "$target"
     fi
 }
 
@@ -376,8 +376,8 @@ function ghelp()
 {
     if [ $# -eq 1 ]
     then
-	cat ~/bf/git/git.sh | grep "function" -B1 | grep -E -A2 "# (.)*$1"
+	grep "function" -B1 ~/bf/git/git.sh | grep -E -A2 "# (.)*$1"
     else
-	cat ~/bf/git/git.sh | grep "function" -B1	
+	grep "function" -B1 ~/bf/git/git.sh
     fi
 }
