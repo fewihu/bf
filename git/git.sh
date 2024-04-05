@@ -284,29 +284,6 @@ function ga()
     git add -p "$@"
 }
 
-# interactive patchwise git add
-function gadd(){
-
-    if [ $# -ne 1 ]
-    then
-	read -p "Aspect?" aspect
-    else
-	aspect=$1
-    fi
-    files=$(git status -s | grep -E "(^M )|(^ \?)|(^ D)|(^ A)|(^A )|(^MM)|(^\?\?)" | cut -d ' ' -f2)
-
-    echo debug
-    for file in $files
-    do
-	echo "$aspect"
-	read -p "Add $file?" ret
-	if [ $ret="y" ]
-	then
-	    git add -p $file
-	fi
-    done
-}
-
 # amend commit
 function gamend()
 {
