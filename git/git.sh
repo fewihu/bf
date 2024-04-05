@@ -135,8 +135,13 @@ git_log_num()
 	| nl \
 	| awk '{ gsub(":G:","\033[3m"); print }' \
 	| awk '{ gsub(":END:","\033[0m"); print }' \
-	| awk '{ gsub(":N:","\033[35m"); print }' \
+	| awk '{ gsub(":N:","\033[3m"); print }' \
 	| awk -v me="$me" '{ gsub("'"$me"'","\033[34m'"$me"'\033[0m"); print}'
+}
+
+function gsw()
+{
+    git show "$@"
 }
 
 # --- log end ---
