@@ -73,7 +73,7 @@ function gri ()
 	printf " * interactively rebase the last n commits"
 	return
     fi
-    git rebase -i HEAD~"$1"
+    git rebase -i HEAD~"$1" --autostash
 }
 
 # --- rebase end ---
