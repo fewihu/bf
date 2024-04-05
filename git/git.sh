@@ -136,13 +136,17 @@ function gl()
 
 git_log_num()
 {
-    me=$(git config user.name)
     git --no-pager log -n "$1" --pretty="%h :%G?:%<(20)%cn:END: %s" \
 	| nl \
-	| awk '{ gsub(":G:","\033[3m"); print }' \
-	| awk '{ gsub(":END:","\033[0m"); print }' \
-	| awk '{ gsub(":N:","\033[3m"); print }' \
-	| awk -v me="$me" '{ gsub("'"$me"'","\033[34m'"$me"'\033[0m"); print}'
+	| awk '{ gsub(":N:","\033[33m"); print }' \
+	| awk '{ gsub(":U:","\033[32m"); print }' \
+	| awk '{ gsub(":G:","\033[32m"); print }' \
+	| awk '{ gsub(":E:","\033[91m"); print }' \
+	| awk '{ gsub(":X:","\033[92m"); print }' \
+	| awk '{ gsub(":Y:","\033[92m"); print }' \
+	| awk '{ gsub(":R:","\033[92m"); print }' \
+	| awk '{ gsub(":B:","\033[31m"); print }' \
+	| awk '{ gsub(":END:","\033[0m"); print }'
 }
 
 function gsw()
