@@ -110,7 +110,13 @@ function gl()
 	    git_log_num 20
 	    ;;
 	-l)
-	    git_log_num 40
+	    if [ -z $2 ]
+	    then
+		let num=40
+	    else
+		num=$2
+	    fi
+	    git_log_num "$num"
 	    ;;
 	-f)
 	    git --no-pager log --reverse --name-only --oneline
