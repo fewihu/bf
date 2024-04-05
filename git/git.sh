@@ -170,16 +170,12 @@ function gbloc()
 # checkout main or master
 function gmain()
 {
-    git --no-pager branch --all | grep -E "[* |  ]master$" > /dev/null
-    if [ $? -eq 0 ]
+    branch=$(git --no-pager branch --all | grep -E "^\* main|  main|* master|  master$" | grep -Eo "main|master")
+    if [[ -n $branch ]]
     then
-	git checkout master
-    fi
-
-    git --no-pager branch --all | grep -E "[* |  ]main$" > /dev/null
-    if [ $? -eq 0 ]
-    then
-	git checkout main
+	git checkout "$branch"
+    else
+	echo "could not find main or master"
     fi
 }
 
