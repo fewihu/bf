@@ -113,7 +113,7 @@ function gl()
 	    git_log_num 40
 	    ;;
 	-f)
-	    git --no-pager log --format='---%n%s%n%b'
+	    git --no-pager log --reverse --name-only --oneline
 	    ;;
 	-g)
 	    git log --oneline --graph
