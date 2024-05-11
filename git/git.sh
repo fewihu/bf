@@ -375,6 +375,22 @@ function gtch()
 {
     git show --pretty="" --name-only   
 }
+
+# show top level README.md if there is one
+function grm()
+{
+    target=$(git rev-parse --show-toplevel);
+
+    if [ -f "$target/README.md" ]
+    then
+	echo "found README.md at $target"
+	glow "$target/README.md"
+    else
+	echo "No README.md present, switching back"
+    fi
+}
+
+
 # --- others end ---
 
 function ghelp()
