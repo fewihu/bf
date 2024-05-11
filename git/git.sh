@@ -331,7 +331,13 @@ function gss()
 function gs()
 {
     ahead_or_behind
-    git status -s "$@"
+    if [[ $1 == "-i" ]]
+    then
+	shift
+	git status -s --ignored "$@"
+    else
+	git status -s "$@"
+    fi
 }
 
 # --- status end ---
