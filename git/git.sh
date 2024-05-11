@@ -107,36 +107,45 @@ function gl()
 {
     case $1 in
 	-s)
-	    git_log_num 20
+	    # short
+	    shift
+	    git_log_num 20 "$@"
 	    ;;
 	-l)
-	    if [ -z $2 ]
-	    then
-		let num=40
-	    else
-		num=$2
-	    fi
-	    git_log_num "$num"
+	    # long, l=<num>
+	    shift
+	    git_log_num 40 "$@"
+	    ;;
+	-l=*)
+	    num=$(echo "$1" | grep -o [0-9]*)
+	    shift
+	    git_log_num "$num" "$@"
 	    ;;
 	-f)
-	    git --no-pager log --reverse --name-only --oneline
+	    # touched files
+	    shift
+	    git --no-pager log --reverse --name-only --oneline "$@"
 	    ;;
 	-g)
-	    git log --oneline --graph
+	    # graph
+	    shift
+	    git log --oneline --graph "$@"
 	    ;;
 	-*)
 	    echo "Unknown option $1"
 	    return 1
 	    ;;
 	*)
-	    git_log_num 20
+	    git_log_num 20 "$@"
 	    ;;
     esac
 }
 
 git_log_num()
 {
-    git --no-pager log -n "$1" --pretty="%h :%G?:%<(20)%cn:END: %s" \
+    num="$1"
+    shift
+    git --no-pager log -n "$num" --pretty="%h :%G?:%<(20)%cn:END: %s" "$@" \
 	| nl \
 	| awk '{ gsub(":N:","\033[33m"); print }' \
 	| awk '{ gsub(":U:","\033[32m"); print }' \
