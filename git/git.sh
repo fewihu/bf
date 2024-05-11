@@ -267,14 +267,13 @@ function gdisc()
 # commit
 function gc()
 {
-    git commit -s "$@"
-}
-
-# add and commit
-function gac()
-{
-    git add "$@"
-    git commit
+    if [[ "$1" == "-nv" ]]
+    then
+	shift
+	git commit -s --no-verify "$@"
+    else
+	git commit -s "$@"
+    fi
 }
 
 # discard last commit, but keep staging area
@@ -298,13 +297,25 @@ function ga()
 # amend commit
 function gamend()
 {
-    git commit --amend "$@"
+    if [[ "$1" == "-nv" ]]
+    then
+	shift
+	git commit --amend --no-verify "$@"
+    else
+	git commit --amend "$@"
+    fi
 }
 
 # amend without edit
 function gane()
 {
-    git commit --amend --no-edit "$@"
+    if [[ "$1" == "-nv" ]]
+    then
+	shift
+	git commit --amend --no-edit --no-verify "$@"
+    else
+	git commit --amend --no-edit "$@"
+    fi
 }
 
 # --- commit end ---
