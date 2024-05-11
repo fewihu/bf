@@ -183,9 +183,10 @@ function gmain()
     branch=$(git --no-pager branch --all | grep -E "^\* main|  main|* master|  master$" | grep -Eo "main|master")
     if [[ -n $branch ]]
     then
-	git checkout "$branch"
+	git checkout "$branch" "$@"
     else
-	echo "could not find main or master"
+	echo "could not find main or master, trying devel"
+	git checkout devel "$@"
     fi
 }
 
