@@ -296,16 +296,37 @@ function guc
     git reset @~
 }
 
+ga_single()
+{
+    allStatus=$(git status -s "$@" | cut -b4-)
+    for s in $allStatus
+    do
+	status=$(git status -s "$s"| cut -b-2)
+	if [ "$status" == "??" ]
+	then
+	    git add "$s"
+	    echo "Added new file $s entirely"
+	fi
+	git add -p "$@"
+    done
+}
+
 # add
 function ga()
 {
-    status=$(git status -s "$@"| cut -b-2)
-    if [ "$status" == "??" ]
+    if [ $# -eq 0 ]
     then
-	git add "$@"
-	return 0
+	for var in $(echo *)
+	do
+	    ga_single "$var"
+	done
+    else
+	for var in "$@"
+	do
+	    ga_single "$var"
+	done
     fi
-    git add -p "$@"
+
 }
 
 # amend commit
