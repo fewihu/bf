@@ -269,6 +269,11 @@ function gdisc()
 	shift
 	git reset HEAD "$@" -p
 	return
+    elif [ "$1" == "-a" ]
+    then
+	 shift
+	 git reset HEAD
+	 return
     fi
     git checkout -p -- "$@"
 }
