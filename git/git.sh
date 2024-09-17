@@ -231,6 +231,11 @@ function giff()
 	shift
 	git diff --cached "$@"
 	return
+    elif [[ $1 == "-n" ]]
+    then
+	shift
+	git diff --name-only
+	return
     fi
     git diff "$@"
 }
