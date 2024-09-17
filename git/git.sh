@@ -62,6 +62,23 @@ function gpus()
     fi
 }
 
+# push specific reference to origin
+function gpref()
+{
+    if [[ -z $1 ]]
+    then
+	echo "Provide a reference and (optiobnal) origin branch name"
+	echo "Usage: gpref <local-ref> [<origin-name>]"
+    fi
+
+    upstream=$(git rev-parse --abbrev-ref HEAD)
+    if [[ $# -eq 2 ]]
+    then
+	upstream=$2
+    fi
+    git push origin "$1":refs/heads/"$upstream" -f
+}
+
 # --- push and pull end ---
 # === rebase ===
 
