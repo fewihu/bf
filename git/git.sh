@@ -177,7 +177,13 @@ git_log_num()
 
 function gsw()
 {
-    git show "$@"
+    if [[ $1 == '-np' ]]
+    then
+	shift
+	git --no-pager show "$@"
+    else
+	git show "$@"
+    fi
 }
 
 # --- log end ---
