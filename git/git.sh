@@ -160,10 +160,26 @@ function gl()
 
 git_log_num()
 {
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    upstream=$(git rev-parse --short origin/$branch 2> /dev/null)
+    if [[ $? -ne 0 ]]
+    then
+	upstream=will_not_be_found
+    fi
+
+    default=$(git --no-pager branch --all | grep -E "^\* main|  main|* master|  master$" | grep -Eo "main|master")
+    if [[ $? -ne 0 ]]
+    then
+       default=devel
+    fi
+    up_default=$(git rev-parse --short origin/$default)
+
     num="$1"
     shift
     git --no-pager log -n "$num" --pretty="%h :%G?:%<(20)%cn:END: %s" "$@" \
 	| nl \
+	| awk -v u="$upstream" '{ gsub(u,"\033[;1m"u"\033[;0m"); print }' \
+	| awk -v d="$up_default" '{ gsub(d,"\033[36;1m"d"\033[;0m"); print }' \
 	| awk '{ gsub(":N:","\033[33m"); print }' \
 	| awk '{ gsub(":U:","\033[32m"); print }' \
 	| awk '{ gsub(":G:","\033[32m"); print }' \
