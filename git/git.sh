@@ -63,7 +63,7 @@ function gpus()
 }
 
 # push specific reference to origin
-function gpref()
+function gpr()
 {
     if [[ -z $1 ]]
     then
@@ -206,7 +206,7 @@ function gsw()
 # === branches ===
 
 # super fancy git checkout alias for remotes -> local
-function gchck()
+function gco()
 {
     git branch --all | grep  remote | grep -v HEAD | cut -d '/' -f3- | \
     fzf -i -e +s \
@@ -220,7 +220,7 @@ function gchck()
 }
 
 # switch to local branch
-function gbloc()
+function gbl()
 {
     git branch | grep -v "\*" | fzf | xargs git switch $@
 }
@@ -306,7 +306,7 @@ function glt()
 # === commit ===
 
 # discard changes in working directory patchwise
-function gdisc()
+function gd()
 {
     if [ "$1" == "-s" ]
     then
@@ -394,7 +394,7 @@ function ga()
 }
 
 # amend commit
-function gamend()
+function gam()
 {
     if [[ "$1" == "-nv" ]]
     then
