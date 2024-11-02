@@ -466,13 +466,13 @@ function gfileh()
 	echo "Usage: gfullHist <file>"
 	return;
     fi
-    git --no-pager log --pretty="%h" --follow "$1" | xargs git --no-pager show
+    git --no-pager log --pretty="%H: %s (%cn)" --follow "$1"
 }
 
 # files touched by last commit
 function gtch()
 {
-    git show --pretty="" --name-only   
+    git show --pretty="" --name-only "$@"
 }
 
 # show top level README.md if there is one
