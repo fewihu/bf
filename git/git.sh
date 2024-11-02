@@ -348,10 +348,30 @@ ga_single()
 	status=$(git status -s "$s"| cut -b-2)
 	if [ "$status" == "??" ]
 	then
+	    if [[ $s =~ /$ ]]
+	    then
+		ga_new_dir "$s"
+		return
+	    fi
 	    git add "$s"
 	    echo "Added new file $s entirely"
+	    return
 	fi
 	git add -p "$@"
+    done
+}
+
+ga_new_dir()
+{
+    for file in $(find "$1" -type f)
+    do
+	echo "Add file $file from new directory $1? (y/n)"
+	read -n1  input
+	echo ""
+	if [ "$input" == "y" ]
+	then
+	    git add "$file"
+	fi
     done
 }
 
