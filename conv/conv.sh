@@ -24,7 +24,7 @@ alias c="clear"
 
 # cd shortcuts
 alias ..="cd .."
-alias ...="cd ..."
+alias ...="cd ../.."
 alias ....="cd ../../.."
 
 alias l-="ls -l"
